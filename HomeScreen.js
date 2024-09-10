@@ -1,53 +1,53 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Button, StyleSheet, Image, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library
 
-// Replace with the path to your logo and background images
-const logoImage = require('./images/settingB.png');
-const backgroundImage = require('./images/repair.jpeg'); // Add your background image here
+const logoImage = require('./images/settingW.png'); // Replace with the path to your logo image
+const backgroundImage = require('./images/repair2.jpeg'); // Replace with the path to your background image
 
 const HomeScreen = () => {
   const nav = useNavigation();
 
- 
   const handleRefresh = () => {
-    nav.reset({
-      index: 0,
-      routes: [{ name: 'Splash' }], // Navigate to SplashScreen
-    });
-    // Set a timeout to navigate back to the Home screen after loading
+    // Navigate to the SplashScreen or reload logic
+    nav.navigate('Splash');
+    
+    // Simulate the loading and refresh the Home screen after 3 seconds
     setTimeout(() => {
       nav.replace('Home');
-    }, 3000); // 3 seconds timeout, adjust if needed
+    }, 3000);
   };
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleRefresh}>
-            <Image source={logoImage} style={styles.logo} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Welcome to the Service Finder App</Text>
+      {/* Add a semi-transparent overlay to dim the background */}
+      <View style={styles.overlay} />
+
+      {/* Wrap your content in ScrollView to enable scrolling */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleRefresh}>
+              <Image source={logoImage} style={styles.logo} />
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Text style={styles.title}>Welcome to the Service Finder App</Text>
+          </View>
+
+          <View style={styles.navBar}>
+            <Button
+              title="Choose Service"
+              onPress={() => nav.navigate('ServiceSelection')}
+            />
+            <Button
+              title="Set Location"
+              onPress={() => nav.navigate('LocationSelection')}
+            />
+          </View>
         </View>
-        <View style={styles.navBar}>
-          <Button
-            title="Choose Service"
-            onPress={() => nav.navigate('ServiceSelection')}
-          />
-          <Button
-            title="Set Location"
-            onPress={() => nav.navigate('LocationSelection')}
-          />
-        </View>
-        <View style={styles.bottomNav}>
-          <TouchableOpacity onPress={() => nav.navigate('Home')}>
-            <Icon name="home" size={30} color="#007BFF" />
-          </TouchableOpacity>
-          {/* Add more navigation icons as needed */}
-        </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -55,7 +55,14 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover', // Ensure the image covers the entire screen
+    resizeMode: 'cover', // Ensure the background image covers the entire screen
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // Fill the entire background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity for dimming
+  },
+  scrollContainer: {
+    flexGrow: 1, // Makes the ScrollView content take full available space
   },
   container: {
     flex: 1,
@@ -70,27 +77,20 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: 'contain',
-    position: 'relative',
-    bottom: 30, 
-    right: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 44,
     marginLeft: 10,
     flex: 1,
-    fontWeight: 'condensed'
+    fontWeight: '900',
+    textAlign: 'center',
+    color: '#fff', // White text color to stand out against dimmed background
   },
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 20,
     width: '100%',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
   },
 });
 

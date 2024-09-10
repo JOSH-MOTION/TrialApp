@@ -60,7 +60,6 @@ const App = () => {
             <Stack.Screen
             name="MainContainer"
             component={MainContainer} // Use the bottom tab navigator here
-            options={{ headerShown: false }}
           />
           </>
         )}
